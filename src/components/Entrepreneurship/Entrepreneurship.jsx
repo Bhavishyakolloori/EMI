@@ -28,7 +28,7 @@ function Entrepreneurship() {
       <h3 className='auch'>Auction Time: EveryDay 12:00AM to 3:00PM </h3>
       <div className='text-white'>Today's Results will be posted by 8:00PM </div>
       </center>
-        {(((hour>=0)&&(hour<15))) ? <div>
+        {(((hour>=9)&&(hour<15))) ? <div>
           <form onSubmit={handleSubmit(submitForm)}>
             <div  className="container container1 fluid ">
               <div className="row row-cols-1 row-cols-lg-1 ">
