@@ -25,11 +25,15 @@ export default function MentorDisplayPage() {
             </div>
             <div className="card-body text">
                 
-                <h6>By: <span className="fw-bold">{obj.username}</span></h6>
+                <h6>Idea: <span className="fw-bold">{obj.idea}</span></h6>
+                <video width="320" height="240" controls autoPlay >
+                    <source src={obj.link} type="video/mp4"/>
+                </video>
             </div>
-            {/* <div className="card-footer text-end" id={val}>
-                <button  className="btn btn-warning" onClick={()=>{navigate('/mentordisplay')}}>More Details</button>
-            </div> */}
+            <div className="card-footer text-end" id={val}>
+                <button  className="btn btn-warning" onClick={()=>{navigate('/investordisplay/ent1')}}>More Details</button>
+            </div>
+    <Outlet/>
     </div>
     )}
 </div>)

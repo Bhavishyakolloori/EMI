@@ -64,16 +64,20 @@ function Entrepreneurship() {
                       {errors.subject?.message &&<p className="text-danger">{errors.subject?.message}</p>}
                   </div>
               </div> */}
-               <div className='col c1' >
-                 <input type="file" id="fileupload"   style={{display:'none'}} />
-                 <label htmlFor="fileupload"   style={{cursor:'pointer'}}>
-                  select file...
-                  </label>
-                  <br />
-                  <button type="submit" className='btn btns mb-5'>
-                   submit your idea
-                  </button>
-                  </div>
+              <div className="col c1">
+              <input type="text" className='form-control rounded mb-2' placeholder='Username' {...register("username",{required:{value:true,message:"* Username is required"},minLength:{value:4,message:"* please type atleast 4 characters"},maxLength:{value:20,message:"* Sorry you cannot use more than 20 characters"}})}>
+              </input>
+              {errors.username?.message ? <p className="text-danger">{errors.username?.message}</p>:<p className='mt-2'></p>}
+      
+              </div>
+              <div className='col c1' >
+                <label htmlFor="link"   style={{cursor:'pointer'}}>
+                  Paste Your Video Link here...
+                </label>
+                <input type="text" id="link"name="link" className="form-control" {...register("link",{required: {value:"true",message:"* Video Link is required"}})}/>
+                {errors.link?.message &&<p className="text-danger">{errors.link?.message}</p>}
+                <br />
+              </div>
 
               <div className=" row row-cols-6 mb-5">
                   <div className=" col c1 mx-auto">

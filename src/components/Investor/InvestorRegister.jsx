@@ -1,67 +1,119 @@
-import React , {useState} from 'react'
-import axios from "axios";
-const InvestorRegister = () => {
-  const [user,setUser] = useState({
-      name:"",
-      email:"",
-      password: ""
-  })
-  const handleChange = e =>{
-    const {name,value} = e.target
-    setUser({
-    ...user,
-    [name]:value
-    })
-  }
+import React,{useEffect, useState} from 'react';
+import {useForm} from 'react-hook-form';
+import "./InvestorRegister.css";
+import { useNavigate } from 'react-router-dom';
 
-  const egister = ()=>{
-   const {name,email,password} = user
-   if (name && email && password){
-    axios.post("http://localhost:6969/Register",user )
-    .then(res=>console.log(res))
-   }
-   else{
-       alert("invalid input")
-   };
-    return (
-        <>    
-          <div class="flex flex-col max-w-md px-4 py-8 bg-white rounded-lg shadow dark:bg-gray-800 sm:px-6 md:px-8 lg:px-10">
-            <div class="self-center mb-2 text-xl font-light text-gray-800 sm:text-2xl dark:text-white">
-              Create a new account
-            </div>
-            <span class="justify-center text-sm text-center text-gray-500 flex-items-center dark:text-gray-400">
-              Already have an account ?
-              <a href="#" target="_blank" class="text-sm text-blue-500 underline hover:text-blue-700">
-                Sign in
-              </a>
-            </span>
-            <div class="p-6 mt-8">
-              <form action="#">
-                <div class="flex flex-col mb-2">
-                  <div class=" relative ">
-                    <input type="text" id="create-account-pseudo" class=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" name="name" value={user.name} onChange={handleChange} placeholder="FullName"/>
-                  </div>
-                </div>
-                <div class="flex gap-4 mb-2">
-                  <div class=" relative ">
-                    <input type="text" id="create-account-first-name" class=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" name="email" value={user.email} onChange={handleChange} placeholder="Email"/>
-                  </div>
-                </div>
-                <div class="flex flex-col mb-2">
-                  <div class=" relative ">
-                     <input type="password" id="create-account-email" class=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" name="password" value={user.password} onChange={handleChange}    placeholder="password"/>
-                  </div>
-                </div>
-                <div class="flex w-full my-4">
-                  <button type="submit" class="py-2 px-4  bg-purple-600 hover:bg-purple-700 focus:ring-purple-500 focus:ring-offset-purple-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg " onClick={egister} >
-                    Register
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </>
-    )
+function EntrepreneurRegister() {
+  let { register, handleSubmit, formState: { errors } } = useForm();
+  let [auth,setAuth]=useState(false)
+  let navigate=useNavigate();
+  let func=()=>{
+    if (Object.keys(errors).length === 0 && errors.constructor === Object) {
+        setAuth(true);
+    }
   }
+  useEffect(() => {
+    {auth && navigate('../Login')}
+    
+  }, [func])
+  
+  let submitForm=(userObj)=>{
+    fetch("http://localhost:4000/Investorusers",{
+        method:"POST",
+        headers:{
+            'Content-Type':'application/json'
+        },
+        body:JSON.stringify(userObj)
+    })
+    .catch(err=>console.log("err is ",err))
+    console.log(userObj);
+    };
+  
+  return (    
+    <div className="reg container">
+      <style> @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap'); </style>
+      <h1 className="head display-3">Registration Form </h1>
+      <form onSubmit={handleSubmit(submitForm)}>
+        <div className="container fluid">
+            <div className="row row-cols-1 row-cols-lg-2">
+                <div className="col c1">
+                    <label htmlFor="firstname">First Name</label>
+                    <input type="text" name="firstname" id="firstname" className="form-control mx-auto" {...register("firstname",{required:{value:"true",message:"* Firstname is required"},minLength:{value:4,message:"* Firstname is Too Small"},maxLength:{value:10,message:"* Firstname is Too Big"}})} />
+                    {errors.firstname?.message &&<p className="text-danger">{errors.firstname?.message}</p>}
+                </div>
+                <div className="col c1">
+                    <label htmlFor="lastname">Last Name</label>
+                    <input type="text" name="lastname" id="lastname" className="form-control mx-auto" {...register("lastname",{required:{value:"true",message:"* Lastname is required"},minLength:{value:4,message:"* Lastname is Too Small"},maxLength:{value:10,message:"* Lastname is Too Big"}})}/>
+                    {errors.lastname?.message &&<p className="text-danger">{errors.lastname?.message}</p>}
+                </div>
+                <div className="col c1">
+                    <label htmlFor="username">Username</label>
+                    <input type="text" name="username" id="username" className='form-control rounded  m-4 mx-auto' {...register("username",{required:{value:"true",message:"* Username is required"},minLength:{value:4,message:"* Username is Too Small"},maxLength:{value:20,message:"* Username is Too Big"}})}/>
+                    {errors.username?.message &&<p className="text-danger">{errors.username?.message}</p>}
+                </div>
+                <div className="col c1">
+                    <label htmlFor="password">Password</label>
+                    <input type="password" name="password" id="password" className='form-control rounded  m-4 mx-auto'  {...register("password",{required:{value:"true",message:"* Password is required"},minLength:{value:4,message:"* Password is Too Small"},maxLength:{value:10,message:"* Password is Too Big"}})}/>
+                    {errors.password?.message &&<p className="text-danger">{errors.password?.message}</p>}
+                </div>
+                {/* <div className="col c1">
+                    <label htmlFor="birthday">Birthday</label>
+                    <input type="date" name="birthday" id="birthday" className="form-control mx-auto" {...register("birthday",{required:{value:"true",message:"* Birthday is required"},max:{value:"2005-12-20",message:"* You're not old enough"}})}/>
+                    {errors.birthday?.message &&<p className="text-danger">{errors.birthday?.message}</p>}
+                </div> */}
+                <div className="col c1">
+                    <label htmlFor="gender">Gender</label>
+                    <div className="row row-cols-1 row-cols-lg-2">
+                        <div className="col">
+                            <div className="form-check">
+                                <input type="radio" className="form-check-input" id="male" name="gender" value="male" {...register("gender",{required:{value:"true",message:"* Please select gender"}})}/>
+                                <label htmlFor="male" className="form-check-label">Male</label>
+                            </div>
+                        </div>
+                        <div className="col">
+                            <div className="form-check">
+                                <input type="radio" className="form-check-input" id="female" name="gender" value="female" {...register("gender",{required:{value:"true",message:"* Please select gender"}})}/>
+                                <label htmlFor="female" className="form-check-label">Female</label>
+                            </div>
+                        </div>
+                    </div>
+                    {errors.gender?.message &&<p className="text-danger">{errors.gender?.message}</p>}
+                </div>
+                <div className="col c1">
+                    <label htmlFor="mail">Email</label>
+                    <input type="email" name="mail" id="mail" className="form-control" {...register("mail",{required:{value:"true",message:"* Email is required"}})}/>
+                    {errors.mail?.message &&<p className="text-danger">{errors.mail?.message}</p>}
+                </div>
+                
+                <div className="col c1">
+                    <label htmlFor="phonenumber">Phone Number</label>
+                    <input type="number" name="phonenumber" id="phonenumber" className="form-control" {...register("phonenumber",{required:{value:"true",message:"* Phonenumber is required"},minLength:{value:10,message:"* Phonenumber must be 10-digit"},maxLength:{value:10,message:"* Phonenumber must be 10-digit"}})}/>
+                    {errors.phonenumber?.message &&<p className="text-danger">{errors.phonenumber?.message}</p>}
+                </div>
+            </div>
+            <div className="row row-cols-1">
+                <div className="col c1">
+                <label htmlFor="subject">Subject</label>
+                <select className="form-select" name="subject" id="subject" {...register("subject",{required:{value:"true",message:"* Please select Subject"}})} defaultValue="" >
+                    <option value="" disabled hidden>Choose Subject...</option>
+                    <option value="trading">Trading</option>
+                    <option value="Manufacturing">Manufacturing</option>
+                    <option value="Agricultural">Agricultural</option>
+                    <option value="technical">Technical</option>
+                    <option value="non-technical">Non-Technical</option>
+                </select>
+                {errors.subject?.message &&<p className="text-danger">{errors.subject?.message}</p>}
+                </div>
+            </div>
+            <div className="row row-cols-6">
+                <div className="col c1 mx-auto">
+                    <button  className="btn  btn-warning text-dark" type="submit" onClick={()=>func()}>Submit</button>
+                </div>
+            </div>
+        </div>
+      </form>
+    </div>
+  )
 }
-export default InvestorRegister;
+
+export default EntrepreneurRegister

@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import {useForm} from "react-hook-form"
+import { useNavigate } from 'react-router-dom';
 import './MentorLogin.css'
 
 function MentorLogin() {
   let  {register,handleSubmit,formState:{errors}}=useForm();
+  let navigate=useNavigate();
   let [Logindetails,setLogin]=useState([]);
   let authentication=false;
   useEffect(()=>{fetch("http://localhost:4000/MentorDetails")
   .then(res=>res.json())
   .then(data=>setLogin(data))
   .catch(ree=>console.error("error is",ree))},[])
-console.log(errors);
+  console.log(errors);
 
   function authentor(obj){
     let authentication=false;
@@ -47,7 +49,7 @@ console.log(errors);
 
         </input>
         {errors.password?.type=="required" ? <p className="text-danger">* Password is required</p>:<p className='mt-2'><br/></p>}
-        <button type="submit" className='btn btn-warning'>
+        <button type="submit" className='btn btn-warning' onClick={()=>navigate('/mentordisplay')}>
             Login
         </button>
         </form>

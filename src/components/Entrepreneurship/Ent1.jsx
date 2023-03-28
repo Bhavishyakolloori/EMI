@@ -14,7 +14,6 @@ function Ent1() {
     }
   return (
     <div>
-        <div>embeded video</div>
         <button onClick={()=>auct()} className="btn btne1">Opt-in for Auction</button>
         <div className="auction" style={sty}>
             <div>
